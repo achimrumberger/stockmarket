@@ -15,6 +15,7 @@ As the yahoo finance no longer seems to work, an alternative using google data.
 library(readr)
 library(ggplot2)
 library(lubridate)
+library(plotly)
 ```
 
 ## Function to get google finance data
@@ -106,9 +107,16 @@ p <- p + scale_y_discrete(name ="Schlusskurs")
 p
 
 ```
+
 ##  and save the plot as well
 ```{r}
 ggsave("shares_order.png", width = 30, height = 20, units = "cm")
 
 ```
 
+## Interactive graph
+Using plotly
+
+```{r}
+ggplotly(p, tooltip = c("Stock"))
+```
