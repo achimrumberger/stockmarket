@@ -8,18 +8,13 @@ As the yahoo finance no longer seems to work, an alternative using google data.
 
 ``` r
 # necessary libraries
-library(data.table)
+library(readr)
 library(ggplot2)
 library(lubridate)
 ```
 
     ## 
     ## Attaching package: 'lubridate'
-
-    ## The following objects are masked from 'package:data.table':
-    ## 
-    ##     hour, isoweek, mday, minute, month, quarter, second, wday,
-    ##     week, yday, year
 
     ## The following object is masked from 'package:base':
     ## 
@@ -28,7 +23,7 @@ library(lubridate)
 Function to get google finance data
 -----------------------------------
 
-Use the 'fread' function from 'data.table'
+Use the 'read\_csv' function from 'readr'
 
 ``` r
 google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em, ed)
@@ -44,29 +39,31 @@ google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em
     ed <- as.numeric(substr(system_time, start = 9, stop = 10))
   }
   
-  require(data.table)
-  # Fetch data from google
-  google_out = tryCatch(
-    suppressWarnings(
-      fread(paste0("http://finance.google.com/finance/historical",
-                   "?q=", sym,
-                   "&startdate=", paste(sm, sd, sy, sep = "+"),
-                   "&enddate=", paste(em, ed, ey, sep = "+"),
-                   "&output=csv"), sep = ",")),
+  require(readr)
+  query_result <- tryCatch(
+    read_csv(paste0("http://finance.google.com/finance/historical",
+                               "?q=", sym,
+                               "&startdate=", paste(sm, sd, sy, sep = "+"),
+                               "&enddate=", paste(em, ed, ey, sep = "+"),
+                               "&output=csv")),
     error = function(e) NULL
   )
   
-  # If successful, rename first column
-  if(!is.null(google_out)){
-    names(google_out)[1] = "Date"
-  }
   
-  return(google_out)
+  return(query_result)
 }
 ```
 
 I want to read data from VW, Tesla, Daimler IBM and Apple
 ---------------------------------------------------------
+
+``` r
+apple_data = google_stocks('AAPL', sy = 2010)
+vw_data = google_stocks('SWX%3AVW', sy = 2010)
+tesla_data = google_stocks('tsla', sy = 2010)
+dai_data = google_stocks('DAI', sy = 2010)
+ibm_data = google_stocks('ibm', sy = 2010)
+```
 
 Label the data and combine them to one big data.frame
 -----------------------------------------------------
