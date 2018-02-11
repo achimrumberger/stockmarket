@@ -99,12 +99,11 @@ load("shares_dax_order.rda")
 ## And do the Plots
 
 ```{r pressure, echo=FALSE}
-ggplot(shares_dax_order, aes(Date, Close, color = label)) +geom_line() + guides(color=guide_legend("Marke"))
 
-ggplot(shares_dax_order, aes(YM, Close)) + geom_boxplot()
 p <- ggplot(shares_dax_order, aes(YM, Close, fill=label)) 
 p <- p + geom_boxplot() 
 p <- p + theme(axis.text.x = element_text(angle=45))
+p <- p + theme(legend.position="bottom")
 p <- p + scale_x_discrete(name ="Zeitraum")
 p <- p + scale_y_discrete(name ="Schlusskurs")
 p

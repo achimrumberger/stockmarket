@@ -105,10 +105,7 @@ load("shares_dax_order.rda")
 And do the Plots
 ----------------
 
-    ## geom_path: Each group consists of only one observation. Do you need to
-    ## adjust the group aesthetic?
-
-![](finance_google_files/figure-markdown_github-ascii_identifiers/pressure-1.png)![](finance_google_files/figure-markdown_github-ascii_identifiers/pressure-2.png)![](finance_google_files/figure-markdown_github-ascii_identifiers/pressure-3.png) \#\# and save the plot as well
+![](finance_google_files/figure-markdown_github-ascii_identifiers/pressure-1.png) \#\# and save the plot as well
 
 ``` r
 ggsave("shares_order.png", width = 30, height = 20, units = "cm")
