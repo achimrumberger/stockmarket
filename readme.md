@@ -105,7 +105,7 @@ load("shares_dax_order.rda")
 And do the Plots
 ----------------
 
-![](finance_google_files/figure-markdown_github-ascii_identifiers/pressure-1.png) \#\# and save the plot as well
+![](finance_google_files/figure-markdown_github-ascii_identifiers/stockmarket-1.png) \#\# and save the plot as well
 
 ``` r
 ggsave("shares_order.png", width = 30, height = 20, units = "cm")
