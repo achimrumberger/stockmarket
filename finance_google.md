@@ -1,26 +1,36 @@
----
-title: "Stockmarket Google Finance"
-output: github_document
----
+Stockmarket Google Finance
+================
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Get and plot historical stokmarket data from Google Finance
+-----------------------------------------------------------
 
-## Get and plot historical stokmarket data from Google Finance
 As the yahoo finance no longer seems to work, an alternative using google data.
 
-```{r}
+``` r
 # necessary libraries
 library(data.table)
 library(ggplot2)
 library(lubridate)
 ```
 
-## Function to get google finance data
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following objects are masked from 'package:data.table':
+    ## 
+    ##     hour, isoweek, mday, minute, month, quarter, second, wday,
+    ##     week, yday, year
+
+    ## The following object is masked from 'package:base':
+    ## 
+    ##     date
+
+Function to get google finance data
+-----------------------------------
+
 Use the 'fread' function from 'data.table'
 
-```{r}
+``` r
 google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em, ed)
 {
   # sy, sm, sd: start year, start month and start day
@@ -53,21 +63,15 @@ google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em
   
   return(google_out)
 }
-
 ```
 
-## I want to read data from VW, Tesla, Daimler IBM and Apple
+I want to read data from VW, Tesla, Daimler IBM and Apple
+---------------------------------------------------------
 
-```{r, echo=FALSE}
-apple_data = google_stocks('AAPL', sy = 2010)
-vw_data = google_stocks('SWX%3AVW', sy = 2010)
-tesla_data = google_stocks('tsla', sy = 2010)
-dai_data = google_stocks('DAI', sy = 2010)
-ibm_data = google_stocks('ibm', sy = 2010)
-```
+Label the data and combine them to one big data.frame
+-----------------------------------------------------
 
-## Label the data and combine them to one big data.frame
-```{r}
+``` r
 apple_label <- rep("Apple", length(apple_data$Date))
 apple_data$label <- apple_label
 
@@ -88,30 +92,21 @@ shares_dac$datum <- as.factor(shares_dac$Date)
 
 shares_dax_order <- shares_dac[with(shares_dac, order(datum)),]
 shares_dax_order$YM <- format(dmy(shares_dax_order$Date), "%Y-%m")
-
 ```
-## Save the data for further processing
-``` {r}
+
+Save the data for further processing
+------------------------------------
+
+``` r
 save(shares_dax_order, file="shares_dax_order.rda")
 load("shares_dax_order.rda")
-
 ```
-## And do the Plots
 
-```{r stockmarket, echo=FALSE}
+And do the Plots
+----------------
 
-p <- ggplot(shares_dax_order, aes(YM, Close, fill=label)) 
-p <- p + geom_boxplot() 
-p <- p + theme(axis.text.x = element_text(angle=45))
-p <- p + theme(legend.position="bottom")
-p <- p + scale_x_discrete(name ="Zeitraum")
-p <- p + scale_y_discrete(name ="Schlusskurs")
-p
+![](finance_google_files/figure-markdown_github-ascii_identifiers/stockmarket-1.png) \#\# and save the plot as well
 
-```
-##  and save the plot as well
-```{r}
+``` r
 ggsave("shares_order.png", width = 30, height = 20, units = "cm")
-
 ```
-
