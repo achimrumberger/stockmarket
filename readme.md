@@ -26,11 +26,19 @@ Function to get google finance data
 Use the 'read\_csv' function from 'readr'
 
 ``` r
-google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em, ed)
-{
+build_url <- function(sym, sy = 2005, sm = 1, sd = 1, ey, em, ed) {
+   stock_url <- paste0("http://finance.google.com/finance/historical",
+                               "?q=", sym,
+                               "&startdate=", paste(sm, sd, sy, sep = "+"),
+                               "&enddate=", paste(em, ed, ey, sep = "+"),
+                               "&output=csv")
+  
+   return(stock_url)
+}
+google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em, ed) {
   # sy, sm, sd: start year, start month and start day
   # ey, em, ed: end year, end month, and end day
-  
+
   # If TRUE, use the date as the enddate
   if(current){
     system_time <- as.character(Sys.time())
@@ -38,18 +46,12 @@ google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em
     em <- as.numeric(substr(system_time, start = 6, stop = 7))
     ed <- as.numeric(substr(system_time, start = 9, stop = 10))
   }
-  
+  stockurl <- build_url(sym, sy, sm , sd , ey, em, ed)
   require(readr)
   query_result <- tryCatch(
-    read_csv(paste0("http://finance.google.com/finance/historical",
-                               "?q=", sym,
-                               "&startdate=", paste(sm, sd, sy, sep = "+"),
-                               "&enddate=", paste(em, ed, ey, sep = "+"),
-                               "&output=csv")),
+    read_csv(stockurl),
     error = function(e) NULL
   )
-  
-  
   return(query_result)
 }
 ```

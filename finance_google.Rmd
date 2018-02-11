@@ -28,7 +28,7 @@ build_url <- function(sym, sy = 2005, sm = 1, sd = 1, ey, em, ed) {
                                "&startdate=", paste(sm, sd, sy, sep = "+"),
                                "&enddate=", paste(em, ed, ey, sep = "+"),
                                "&output=csv")
-   print(stock_url)
+  
    return(stock_url)
 }
 google_stocks <- function(sym, current = TRUE, sy = 2005, sm = 1, sd = 1, ey, em, ed) {
